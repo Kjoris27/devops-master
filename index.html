@@ -1,16 +1,273 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello World</title>
+    <title>Calculatrix Pro | Super-Héros Édition</title>
+    
+    <!-- FICHIERS CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- POLICES GOOGLE POUR UN DESIGN MODERNE -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FONT AWESOME POUR LES ICÔNES (étoiles, robots, marteaux, etc.) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <h1>Calculatrice intergalactique de super héros</h1>
-    <p>Bienvenue dans la calculatrice intergalactique de super héros ! Cette application vous permet de faire des calculs mathématiques tout en découvrant les pouvoirs et les caractéristiques de vos super héros préférés. Que vous soyez un fan de Marvel, DC ou d'autres univers de super héros, cette calculatrice est faite pour vous !</p>
-    <p>Pour commencer, choisissez votre super héros préféré dans la liste ci-dessous et entrez les chiffres que vous souhaitez calculer. Vous pouvez effectuer des opérations de base telles que l'addition, la soustraction, la multiplication et la division, tout en découvrant les statistiques et les pouvoirs de votre super héros choisi.</p>
-    <p>Amusez-vous bien et que la force des super héros soit avec vous !</p>
+    <div class="container">
+        <!-- ========================================= -->
+        <!-- =====  PARTIE 1: SÉLECTEUR DE HÉROS  ==== -->
+        <!-- ========================================= -->
+        <!-- 
+            Ce panneau permet à l'utilisateur de choisir son super-héros.
+            Chaque héros a sa propre couleur et son propre pouvoir.
+            Le choix du héros changera les couleurs de toute la calculatrice.
+        -->
+        <div class="hero-panel">
+            <!-- Titre du panneau avec éclairs -->
+            <div class="hero-panel-title">
+                <i class="fas fa-bolt"></i>
+                <span>CHOISIS TON SUPER-HÉROS</span>
+                <i class="fas fa-bolt"></i>
+            </div>
+            
+            <!-- 
+                Grille de héros - sera remplie par JavaScript
+                Structure: 2 lignes de 5 héros chacune
+                Les données viennent de js/hero-themes.js
+            -->
+            <div class="hero-grid" id="heroGrid">
+                <!-- 
+                    Les cartes sont générées automatiquement par JavaScript
+                    Chaque carte contient:
+                    - Une icône (fa-robot, fa-hammer, etc.)
+                    - Le nom du héros
+                    - Son pourcentage de puissance
+                -->
+            </div>
+        </div>
+
+        <!-- ========================================= -->
+        <!-- =====  PARTIE 2: CALCULATRICE  ========= -->
+        <!-- ========================================= -->
+        <!-- 
+            Interface principale de la calculatrice.
+            Supporte uniquement les 4 opérations de base:
+            - Addition (+)
+            - Soustraction (-)
+            - Multiplication (×)
+            - Division (÷)
+        -->
+        <div class="calculator">
+            <!-- ===== HEADER DE LA CALCULATRICE ===== -->
+            <!-- Partie supérieure avec titre et contrôles -->
+            <div class="calculator-header">
+                <!-- Effet de lumière animé (change de couleur avec le héros) -->
+                <div class="header-glow"></div>
+                
+                <!-- Titre et icône (l'icône change selon le héros) -->
+                <div class="header-content">
+                    <i class="fas fa-calculator" id="header-icon"></i>
+                    <span>Calculatrix Pro</span>
+                </div>
+                
+                <!-- Boutons de contrôle (minimiser, agrandir, fermer) -->
+                <div class="header-actions">
+                    <i class="fas fa-minus"></i>
+                    <i class="fas fa-square"></i>
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+
+            <!-- ===== ÉCRAN D'AFFICHAGE ===== -->
+            <!-- Affiche les nombres et les opérations -->
+            <div class="display-container">
+                <!-- Effet de verre (glassmorphism) -->
+                <div class="display-glass"></div>
+                
+                <div class="display-content">
+                    <!-- 
+                        expression: affiche l'opération en cours
+                        Exemple: "5 + 3"
+                    -->
+                    <div class="expression" id="expression"></div>
+                    
+                    <!-- 
+                        result: affiche le nombre actuel ou le résultat
+                        C'est l'écran principal de la calculatrice
+                    -->
+                    <input type="text" id="result" class="result" readonly value="0">
+                    
+                    <!-- Curseur clignotant (effet visuel) -->
+                    <div class="cursor-line" id="cursorLine"></div>
+                </div>
+            </div>
+
+            <!-- ===== BANNIÈRE DU HÉROS SÉLECTIONNÉ ===== -->
+            <!-- 
+                Affiche le héros actuellement choisi et sa puissance
+                Se met à jour quand on clique sur un héros
+            -->
+            <div class="hero-banner" id="heroBanner">
+                <div class="hero-banner-content">
+                    <!-- Icône du héros (change dynamiquement) -->
+                    <i class="fas fa-star" id="bannerIcon"></i>
+                    <!-- Texte: "Iron Man - Puissance: 85%" par exemple -->
+                    <span id="bannerText">Aucun héros sélectionné</span>
+                </div>
+            </div>
+
+            <!-- ===== CLAVIER DE LA CALCULATRICE ===== -->
+            <!-- 
+                Uniquement les 4 opérations de base:
+                +, -, ×, ÷
+            -->
+            <div class="keyboard">
+                <!-- Ligne 1 : 7 8 9 + -->
+                <div class="keyboard-row">
+                    <!-- 
+                        Touches numériques: 
+                        data-number contient la valeur à afficher
+                    -->
+                    <button class="key number-key" data-number="7">
+                        <span class="key-main">7</span>
+                    </button>
+                    <button class="key number-key" data-number="8">
+                        <span class="key-main">8</span>
+                    </button>
+                    <button class="key number-key" data-number="9">
+                        <span class="key-main">9</span>
+                    </button>
+                    <!-- 
+                        Touche d'addition:
+                        id="add" sera utilisé par JavaScript
+                    -->
+                    <button class="key operator-key" id="add">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+
+                <!-- Ligne 2 : 4 5 6 - -->
+                <div class="keyboard-row">
+                    <button class="key number-key" data-number="4">
+                        <span class="key-main">4</span>
+                    </button>
+                    <button class="key number-key" data-number="5">
+                        <span class="key-main">5</span>
+                    </button>
+                    <button class="key number-key" data-number="6">
+                        <span class="key-main">6</span>
+                    </button>
+                    <!-- Touche de soustraction -->
+                    <button class="key operator-key" id="subtract">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+
+                <!-- Ligne 3 : 1 2 3 × -->
+                <div class="keyboard-row">
+                    <button class="key number-key" data-number="1">
+                        <span class="key-main">1</span>
+                    </button>
+                    <button class="key number-key" data-number="2">
+                        <span class="key-main">2</span>
+                    </button>
+                    <button class="key number-key" data-number="3">
+                        <span class="key-main">3</span>
+                    </button>
+                    <!-- Touche de multiplication (×) -->
+                    <button class="key operator-key" id="multiply">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <!-- Ligne 4 : C 0 = ÷ -->
+                <div class="keyboard-row">
+                    <!-- 
+                        Touche Clear (C):
+                        Efface le dernier chiffre saisi
+                    -->
+                    <button class="key clear-key" id="clear">
+                        <span class="key-main">C</span>
+                    </button>
+                    
+                    <!-- 
+                        Touche zéro (plus large):
+                        class="zero-key" pour la taille spéciale
+                    -->
+                    <button class="key number-key zero-key" data-number="0">
+                        <span class="key-main">0</span>
+                    </button>
+                    
+                    <!-- 
+                        Touche Égal (=):
+                        Calcule le résultat
+                    -->
+                    <button class="key equals-key" id="equals">
+                        <i class="fas fa-equals"></i>
+                    </button>
+                    
+                    <!-- Touche de division (÷) -->
+                    <button class="key operator-key" id="divide">
+                        <i class="fas fa-divide"></i>
+                    </button>
+                </div>
+
+                <!-- Ligne 5 : . (point décimal) ⌫ (effacer) AC (tout effacer) -->
+                <div class="keyboard-row">
+                    <!-- Point décimal pour les nombres à virgule -->
+                    <button class="key function-key" id="decimal">
+                        <span class="key-main">.</span>
+                    </button>
+                    
+                    <!-- 
+                        Backspace (⌫):
+                        Efface le dernier caractère
+                    -->
+                    <button class="key function-key" id="backspace">
+                        <i class="fas fa-backspace"></i>
+                    </button>
+                    
+                    <!-- 
+                        All Clear (AC):
+                        Réinitialise complètement la calculatrice
+                    -->
+                    <button class="key function-key" id="clear-all">
+                        <span class="key-main">AC</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ===== FOOTER DE LA CALCULATRICE ===== -->
+            <!-- Affiche le statut et le héros actif -->
+            <div class="calculator-footer">
+                <div class="footer-left">
+                    <!-- Point de statut (change de couleur avec le héros) -->
+                    <span class="status-dot" id="statusDot"></span>
+                    <!-- Texte de statut (ex: "Iron Man actif") -->
+                    <span class="status-text" id="statusText">Prêt</span>
+                </div>
+                <div class="footer-right">
+                    <!-- Nom du héros sélectionné -->
+                    <span class="hero-name" id="heroNameDisplay"></span>
+                    <!-- Indicateur de batterie (effet décoratif) -->
+                    <span class="battery">
+                        <i class="fas fa-bolt"></i>
+                        <span>100%</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================= -->
+    <!-- =====  FICHIER JAVASCRIPT  ============ -->
+    <!-- ========================================= -->
     
+   
+    <script src="script.js"></script>
     
+   
 </body>
 </html>

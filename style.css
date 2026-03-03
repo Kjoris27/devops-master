@@ -1,0 +1,702 @@
+/* ============================================================
+   =====  VARIABLES CSS GLOBALES (Comme un thème)  ===========
+   ============================================================
+   :root = la racine du document, ces variables sont disponibles partout
+   On les utilise avec var(--nom-de-la-variable)
+   ============================================================ */
+:root {
+    /* ===== COULEURS DE BASE (Thème violet/vert par défaut) ===== */
+    --primary-color: #6366f1;        /* Violet principal - utilisé pour les accents */
+    --primary-dark: #4f46e5;          /* Violet plus foncé - pour les dégradés */
+    --primary-light: #818cf8;         /* Violet plus clair - pour les effets lumineux */
+    --secondary-color: #10b981;        /* Vert - utilisé pour les succès, touches égale */
+    
+    /* ===== COULEURS DE FOND ===== */
+    --dark-bg: #0f172a;               /* Fond sombre (bleu nuit) */
+    --darker-bg: #020617;              /* Fond très sombre (presque noir) */
+    
+    /* ===== EFFET VERRE (GLASSMORPHISM) ===== */
+    --glass-bg: rgba(255, 255, 255, 0.05);     /* Fond semi-transparent */
+    --glass-border: rgba(255, 255, 255, 0.1);   /* Bordure semi-transparente */
+    
+    /* ===== COULEURS DE TEXTE ===== */
+    --text-primary: #f8fafc;           /* Texte principal (blanc cassé) */
+    --text-secondary: #94a3b8;          /* Texte secondaire (gris bleuté) */
+    
+    /* ===== OMBRES ===== */
+    --shadow-color: rgba(0, 0, 0, 0.5); /* Ombre noire semi-transparente */
+    
+    /* ===== COULEURS D'ÉTAT ===== */
+    --error-color: #ef4444;             /* Rouge pour les erreurs (touche C) */
+    --success-color: #10b981;            /* Vert pour les succès */
+    
+    /* ===== VARIABLES DYNAMIQUES (CHANGENT AVEC LE HÉROS) ===== */
+    /* Ces variables sont modifiées par JavaScript quand on clique sur un héros */
+    --hero-primary: #6366f1;            /* Couleur principale du héros (défaut: violet) */
+    --hero-secondary: #10b981;           /* Couleur secondaire du héros (défaut: vert) */
+    --hero-glow: 0 0 20px rgba(99, 102, 241, 0.5);  /* Effet lumineux */
+    --hero-gradient: linear-gradient(135deg, #4f46e5, #6366f1);  /* Dégradé */
+}
+
+/* ============================================================
+   =====  RÉINITIALISATION (RESET)  ===========================
+   ============================================================
+   On enlève les marges et padding par défaut du navigateur
+   box-sizing: border-box = la largeur inclut le padding et la bordure
+   ============================================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ============================================================
+   =====  STYLES DU CORPS DE LA PAGE  =========================
+   ============================================================ */
+body {
+    /* Police moderne et lisible */
+    font-family: 'Inter', sans-serif;
+    
+    /* Hauteur minimum = toute la hauteur de l'écran */
+    min-height: 100vh;
+    
+    /* Fond dégradé du plus sombre vers le plus clair */
+    background: linear-gradient(135deg, var(--darker-bg) 0%, var(--dark-bg) 50%, #1e293b 100%);
+    
+    /* ===== CENTRAGE FLEX ===== */
+    display: flex;
+    justify-content: center;    /* Centre horizontalement */
+    align-items: center;        /* Centre verticalement */
+    
+    position: relative;         /* Pour positionner les éléments absolus */
+    overflow-x: hidden;         /* Cache le scroll horizontal */
+}
+
+/* ============================================================
+   =====  EFFET DE PARTICULES (ARRIÈRE-PLAN)  ================
+   ============================================================
+   Crée un effet de nébuleuse/cosmique en arrière-plan
+   Les couleurs changent quand on sélectionne un héros
+   ============================================================ */
+body::before {
+    content: '';                /* Nécessaire pour les pseudo-éléments */
+    position: absolute;         /* Positionné par rapport au body */
+    width: 100%;
+    height: 100%;
+    
+    /* ===== DEUX CERCLES DE COULEUR ===== */
+    background: radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(16, 185, 129, 0.15) 0%, transparent 50%);
+    
+    pointer-events: none;       /* Les clics traversent cette couche */
+    transition: background 0.5s ease;  /* Transition douce quand on change de héros */
+}
+
+/* ============================================================
+   =====  CONTENEUR PRINCIPAL  ================================
+   ============================================================ */
+.container {
+    position: relative;
+    z-index: 10;                /* Au-dessus des particules */
+    padding: 20px;              /* Espace intérieur */
+    
+    /* ===== FLEX COLONNE ===== */
+    display: flex;
+    flex-direction: column;      /* Éléments les uns sous les autres */
+    align-items: center;         /* Centrés horizontalement */
+    gap: 30px;                   /* Espace de 30px entre les éléments */
+    
+    max-width: 600px;            /* Largeur maximale */
+    margin: 0 auto;              /* Centré horizontalement */
+}
+
+/* ============================================================
+   =====  PANEL DE SÉLECTION DES HÉROS  ======================
+   ============================================================ */
+.hero-panel {
+    width: 100%;
+    
+    /* ===== EFFET VERRE (GLASSMORPHISM) ===== */
+    background: rgba(15, 23, 42, 0.8);           /* Fond semi-transparent */
+    backdrop-filter: blur(10px);                  /* Flou derrière l'élément */
+    -webkit-backdrop-filter: blur(10px);          /* Pour Safari */
+    
+    border-radius: 30px;                          /* Coins très arrondis */
+    border: 1px solid var(--glass-border);        /* Bordure subtile */
+    padding: 20px;
+    
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);  /* Ombre portée */
+    margin-bottom: 10px;
+}
+
+/* ===== TITRE DU PANEL ===== */
+.hero-panel-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;                    /* Espace entre les éléments */
+    
+    color: var(--text-primary);
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    letter-spacing: 1px;          /* Espacement des lettres */
+}
+
+.hero-panel-title i {
+    color: var(--hero-primary);    /* Couleur du héros actif */
+    animation: pulse 2s infinite;   /* Animation de pulsation */
+}
+
+/* ===== GRILLE DES HÉROS ===== */
+.hero-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* ===== LIGNE DE HÉROS ===== */
+.hero-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);  /* 5 colonnes de largeur égale */
+    gap: 12px;                               /* Espace entre les cartes */
+}
+
+/* ============================================================
+   =====  CARTE D'UN HÉROS  ===================================
+   ============================================================ */
+.hero-card {
+    aspect-ratio: 1 / 1;                    /* Carré parfait (largeur = hauteur) */
+    background: var(--glass-bg);
+    border: 2px solid transparent;           /* Bordure transparente par défaut */
+    border-radius: 20px;
+    
+    /* ===== CENTRAGE DU CONTENU ===== */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    
+    cursor: pointer;                         /* Curseur en forme de main */
+    
+    /* ===== TRANSITION ÉLASTIQUE ===== */
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    
+    padding: 10px;
+    position: relative;
+    overflow: hidden;                        /* Cache ce qui dépasse */
+}
+
+/* ===== EFFET DE BRILLANCE AU SURVOL ===== */
+.hero-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;                             /* Commence caché à gauche */
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.hero-card:hover::before {
+    left: 100%;                               /* La brillance traverse la carte */
+}
+
+/* ===== SURVOL DE LA CARTE ===== */
+.hero-card:hover {
+    transform: translateY(-5px);               /* La carte se lève */
+    border-color: var(--hero-primary);          /* Bordure colorée */
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.5), 0 0 20px var(--hero-primary);
+}
+
+/* ===== CARTE SÉLECTIONNÉE ===== */
+.hero-card.selected {
+    border-color: var(--hero-primary);
+    box-shadow: 0 0 30px var(--hero-primary);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(16, 185, 129, 0.2));
+}
+
+/* ===== ICÔNE DU HÉROS ===== */
+.hero-card i {
+    font-size: 28px;
+    color: var(--hero-primary);
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 0 10px currentColor);  /* Effet de lueur */
+}
+
+.hero-card:hover i {
+    transform: scale(1.2) rotate(10deg);          /* Grossit et tourne */
+}
+
+/* ===== NOM DU HÉROS ===== */
+.hero-card span {
+    color: var(--text-primary);
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+}
+
+/* ===== POURCENTAGE DE PUISSANCE ===== */
+.hero-card .hero-power {
+    font-size: 10px;
+    color: var(--hero-secondary);
+    font-weight: 600;
+    background: rgba(0, 0, 0, 0.3);               /* Fond noir semi-transparent */
+    padding: 2px 8px;                              /* Espace intérieur */
+    border-radius: 10px;                           /* Coins arrondis */
+}
+
+/* ============================================================
+   =====  CALCULATRICE PRINCIPALE  ============================
+   ============================================================ */
+.calculator {
+    width: 100%;
+    
+    /* ===== EFFET VERRE ===== */
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    
+    border-radius: 40px;
+    border: 1px solid var(--glass-border);
+    
+    /* ===== DOUBLE OMBRE ===== */
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),    /* Ombre externe */
+                inset 0 1px 1px rgba(255, 255, 255, 0.1);  /* Ombre interne (lumière) */
+    
+    overflow: hidden;                                     /* Cache les coins */
+    
+    /* ===== TRANSITIONS ===== */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+/* ===== SURVOL DE LA CALCULATRICE ===== */
+.calculator:hover {
+    transform: translateY(-5px);                          /* Se lève */
+    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6),
+                var(--hero-glow);                          /* Ajoute la lueur du héros */
+    border-color: var(--hero-primary);
+}
+
+/* ============================================================
+   =====  HEADER DE LA CALCULATRICE  =========================
+   ============================================================ */
+.calculator-header {
+    position: relative;
+    padding: 15px 25px;
+    background: rgba(2, 6, 23, 0.8);
+    border-bottom: 1px solid var(--glass-border);
+    
+    /* ===== ESPACE ENTRE GAUCHE ET DROITE ===== */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ===== EFFET DE LUMIÈRE QUI BOUGE ===== */
+.header-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;                                          /* Fine ligne */
+    background: linear-gradient(90deg, transparent, var(--hero-primary), transparent);
+    animation: headerGlow 3s infinite;                     /* Animation infinie */
+}
+
+@keyframes headerGlow {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }                                    /* Pulsation */
+}
+
+/* ===== CONTENU GAUCHE DU HEADER ===== */
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.header-content i {
+    color: var(--hero-primary);                            /* Couleur du héros */
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+/* ===== ACTIONS DROITES (boutons de fenêtre) ===== */
+.header-actions {
+    display: flex;
+    gap: 15px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.header-actions i {
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.header-actions i:hover {
+    color: var(--text-primary);                            /* Devient blanc au survol */
+}
+
+/* ============================================================
+   =====  BANNIÈRE DU HÉROS  =================================
+   ============================================================ */
+.hero-banner {
+    margin: 0 25px 15px;
+    padding: 10px 15px;
+    background: var(--glass-bg);
+    border-radius: 30px;
+    border: 1px solid var(--glass-border);
+    transition: all 0.3s ease;
+}
+
+.hero-banner-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--text-primary);
+    font-size: 14px;
+}
+
+.hero-banner-content i {
+    color: var(--hero-primary);
+    animation: starSpin 3s infinite;                       /* Rotation lente */
+}
+
+@keyframes starSpin {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(10deg); }                      /* Petite rotation */
+    75% { transform: rotate(-10deg); }
+}
+
+/* ============================================================
+   =====  ÉCRAN D'AFFICHAGE  =================================
+   ============================================================ */
+.display-container {
+    position: relative;
+    padding: 15px 25px 10px;
+}
+
+/* ===== EFFET VERRE SUR L'ÉCRAN ===== */
+.display-glass {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    right: 20px;
+    bottom: 5px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0) 100%);
+    border-radius: 20px;
+    pointer-events: none;
+}
+
+/* ===== CONTENU DE L'ÉCRAN ===== */
+.display-content {
+    position: relative;
+    background: rgba(2, 6, 23, 0.6);
+    border-radius: 20px;
+    padding: 15px 20px;
+    border: 1px solid var(--glass-border);
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);        /* Ombre interne */
+    transition: border-color 0.3s ease;
+}
+
+.display-content:focus-within {
+    border-color: var(--hero-primary);                      /* Bordure colorée quand actif */
+}
+
+/* ===== LIGNE D'EXPRESSION (ex: "5 + 3") ===== */
+.expression {
+    color: var(--text-secondary);
+    font-size: 14px;
+    min-height: 20px;                                        /* Garde l'espace même vide */
+    text-align: right;
+    margin-bottom: 5px;
+    font-family: 'Monaco', monospace;                        /* Police à chasse fixe */
+}
+
+/* ===== RÉSULTAT PRINCIPAL ===== */
+.result {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-size: 48px;                                         /* Grand texte */
+    font-weight: 300;                                         /* Police fine */
+    text-align: right;
+    outline: none;                                            /* Enlève le contour bleu */
+    font-family: 'Inter', monospace;
+    letter-spacing: 2px;                                      /* Espacement des chiffres */
+}
+
+.result::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.3;
+}
+
+/* ===== CURSEUR CLIGNOTANT ===== */
+.cursor-line {
+    position: absolute;
+    bottom: 15px;
+    right: 20px;
+    width: 2px;
+    height: 30px;
+    background: var(--hero-primary);
+    animation: cursorBlink 1s infinite;                       /* Clignotement */
+    transition: background 0.3s ease;
+}
+
+@keyframes cursorBlink {
+    0%, 100% { opacity: 0; }                                  /* Disparaît */
+    50% { opacity: 1; }                                       /* Apparaît */
+}
+
+/* ============================================================
+   =====  CLAVIER  ===========================================
+   ============================================================ */
+.keyboard {
+    padding: 0 25px 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.keyboard-row {
+    display: flex;
+    gap: 10px;
+}
+
+/* ===== TOUCHE GÉNÉRIQUE ===== */
+.key {
+    flex: 1;                                                  /* Prend la largeur disponible */
+    aspect-ratio: 1 / 1;                                      /* Carré parfait */
+    border: none;
+    border-radius: 20px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+    font-size: 24px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;                               /* Transition rapide */
+    position: relative;
+    overflow: hidden;
+    
+    /* ===== CENTRAGE DU CONTENU ===== */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* ===== OMBRES ===== */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* ===== EFFET DE BRILLANCE SUR LES TOUCHES ===== */
+.key::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.key:hover::before {
+    left: 100%;                                               /* La brillance traverse */
+}
+
+/* ===== SURVOL DES TOUCHES ===== */
+.key:hover {
+    transform: translateY(-2px);                              /* Se lève légèrement */
+    border-color: var(--hero-primary);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3),
+                var(--hero-glow);
+}
+
+.key:active {
+    transform: translateY(2px);                               /* S'enfonce au clic */
+    box-shadow: none;
+}
+
+.key-main {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+/* ============================================================
+   =====  TYPES DE TOUCHES SPÉCIFIQUES  ======================
+   ============================================================ */
+
+/* Touches numériques (0-9) */
+.number-key {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+}
+
+.number-key .key-main {
+    color: var(--text-primary);
+}
+
+/* Touches d'opérateur (+, -, ×, ÷) */
+.operator-key {
+    background: var(--hero-gradient);                         /* Dégradé du héros */
+    border-color: var(--hero-primary);
+}
+
+.operator-key i {
+    font-size: 24px;
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));       /* Ombre sur l'icône */
+}
+
+/* Touches de fonction (., ⌫, AC) */
+.function-key {
+    background: rgba(45, 55, 72, 0.8);                        /* Gris foncé */
+}
+
+/* Touche d'effacement (C) */
+.clear-key {
+    background: linear-gradient(135deg, var(--error-color), #dc2626);  /* Rouge */
+}
+
+/* Touche égale (=) */
+.equals-key {
+    background: linear-gradient(135deg, var(--hero-secondary), #059669);  /* Vert */
+}
+
+.equals-key i {
+    font-size: 28px;
+    filter: drop-shadow(0 0 10px var(--hero-secondary));      /* Lueur verte */
+}
+
+/* Touche zéro (plus large) */
+.zero-key {
+    flex: 2;                                                  /* Prend 2x plus d'espace */
+    aspect-ratio: 2 / 1;                                      /* Rectangle (2x plus large) */
+}
+
+/* ============================================================
+   =====  FOOTER  ============================================
+   ============================================================ */
+.calculator-footer {
+    padding: 15px 25px;
+    background: rgba(2, 6, 23, 0.4);
+    border-top: 1px solid var(--glass-border);
+    
+    /* ===== ESPACE ENTRE GAUCHE ET DROITE ===== */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    font-size: 12px;
+}
+
+/* ===== PARTIE GAUCHE DU FOOTER ===== */
+.footer-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Point de statut qui pulse */
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--hero-primary);                          /* Couleur du héros */
+    border-radius: 50%;
+    animation: pulse 2s infinite;                              /* Pulsation */
+    transition: background 0.3s ease;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }              /* Grossit et s'estompe */
+}
+
+.status-text {
+    color: var(--text-secondary);
+}
+
+/* ===== PARTIE DROITE DU FOOTER ===== */
+.footer-right {
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Nom du héros sélectionné */
+.hero-name {
+    color: var(--hero-primary);
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+/* Indicateur de batterie (décoratif) */
+.battery i {
+    color: var(--hero-secondary);
+    margin-right: 5px;
+    transition: color 0.3s ease;
+}
+
+/* ============================================================
+   =====  RESPONSIVE POUR MOBILE  ============================
+   ============================================================
+   Ces styles s'appliquent quand l'écran fait moins de 550px
+   ============================================================ */
+@media (max-width: 550px) {
+    /* 3 héros par ligne au lieu de 5 */
+    .hero-row {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    /* Réduction de la taille des icônes */
+    .hero-card i {
+        font-size: 22px;
+    }
+    
+    /* Texte plus petit */
+    .hero-card span {
+        font-size: 10px;
+    }
+    
+    /* Résultat plus petit */
+    .result {
+        font-size: 36px;
+    }
+    
+    /* Touches plus petites */
+    .key {
+        font-size: 20px;
+    }
+}
+
+/* ============================================================
+   =====  SCROLLBAR PERSONNALISÉE  ===========================
+   ============================================================
+   Pour Chrome, Edge, Safari
+   ============================================================ */
+::-webkit-scrollbar {
+    width: 8px;                                                /* Largeur de la scrollbar */
+}
+
+::-webkit-scrollbar-track {
+    background: var(--dark-bg);                                /* Fond de la scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--hero-primary);                           /* Poignée colorée */
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--hero-secondary);                         /* Change au survol */
+}
