@@ -1,16 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello World</title>
+    <title>Calculatrice — × et ÷</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Calculatrice intergalactique de super héros</h1>
-    <p>Bienvenue dans la calculatrice intergalactique de super héros ! Cette application vous permet de faire des calculs mathématiques tout en découvrant les pouvoirs et les caractéristiques de vos super héros préférés. Que vous soyez un fan de Marvel, DC ou d'autres univers de super héros, cette calculatrice est faite pour vous !</p>
-    <p>Pour commencer, choisissez votre super héros préféré dans la liste ci-dessous et entrez les chiffres que vous souhaitez calculer. Vous pouvez effectuer des opérations de base telles que l'addition, la soustraction, la multiplication et la division, tout en découvrant les statistiques et les pouvoirs de votre super héros choisi.</p>
-    <p>Amusez-vous bien et que la force des super héros soit avec vous !</p>
-    
-    
+    <main class="app">
+        <h1>Calculatrice (multiplication & division)</h1>
+
+        <div class="calculator">
+            <div id="display" class="display">0</div>
+
+            <div class="keys">
+                <button class="btn" data-value="7">7</button>
+                <button class="btn" data-value="8">8</button>
+                <button class="btn" data-value="9">9</button>
+                <button class="btn op" data-op="divide">÷</button>
+
+                <button class="btn" data-value="4">4</button>
+                <button class="btn" data-value="5">5</button>
+                <button class="btn" data-value="6">6</button>
+                <button class="btn op" data-op="multiply">×</button>
+
+                <button class="btn" data-value="1">1</button>
+                <button class="btn" data-value="2">2</button>
+                <button class="btn" data-value="3">3</button>
+                <button class="btn equal" id="equals">=</button>
+
+                <button class="btn" data-value="0">0</button>
+                <button class="btn" data-value=".">.</button>
+                <button class="btn clear" id="clear">C</button>
+            </div>
+        </div>
+        <p class="note">Cette calculatrice gère uniquement la multiplication et la division.</p>
+    </main>
+
+    <script src="script.js"></script>
 </body>
 </html>
