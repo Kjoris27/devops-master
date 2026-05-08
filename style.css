@@ -1,0 +1,41 @@
+:root{
+	--bg: #f3f4f6;
+	--card: #ffffff;
+	--accent: #0ea5e9;
+	--muted: #6b7280;
+	--btn: #e6e7ea;
+}
+
+*{box-sizing:border-box}
+body{
+	font-family: Inter, system-ui, Arial, sans-serif;
+	background: linear-gradient(180deg,var(--bg),#ffffff);
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	min-height:100vh;
+	margin:0;
+	padding:24px;
+}
+.app{width:100%;max-width:420px}
+h1{font-size:1.2rem;text-align:center;color:#111827;margin:0 0 16px}
+
+.calculator{
+	background:var(--card);
+	border-radius:12px;
+	box-shadow:0 6px 20px rgba(2,6,23,0.08);
+	padding:18px;
+}
+.display{
+	background:#0f172a;color:#fff;border-radius:8px;padding:14px 12px;font-size:1.6rem;text-align:right;min-height:56px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis
+}
+.keys{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.btn{background:var(--btn);border:0;padding:14px;border-radius:8px;font-size:1rem;cursor:pointer;transition:transform .08s ease}
+.btn:active{transform:scale(.98)}
+.btn.op{background:#fef3c7}
+.btn.equal{grid-column:4/5;background:var(--accent);color:#fff}
+.btn.clear{background:#fee2e2}
+.note{font-size:.85rem;color:var(--muted);text-align:center;margin-top:12px}
+
+@media (max-width:420px){.display{font-size:1.4rem;padding:10px}.btn{padding:12px}}
+
